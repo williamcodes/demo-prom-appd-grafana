@@ -1,0 +1,41 @@
+version: '3'
+services:
+  prom:
+    build: ./prom
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+  proxy:
+    environment:
+      - APP_AGENT_AVAILABILITY_URL=$APP_AGENT_AVAILABILITY_URL
+      - APPD_TOKEN=$APPD_TOKEN
+    build: ./proxy
+    volumes:
+      - ./proxy:/app
+    ports:
+      - 5000:5000
+  web:
+    environment:
+      - APPDYNAMICS_CONTROLLER_HOST_NAME=$APPDYNAMICS_CONTROLLER_HOST_NAME
+      - APPDYNAMICS_CONTROLLER_PORT=$APPDYNAMICS_CONTROLLER_PORT
+      - APPDYNAMICS_CONTROLLER_SSL_ENABLED=$APPDYNAMICS_CONTROLLER_SSL_ENABLED
+      - APPDYNAMICS_ACCOUNT_NAME=$APPDYNAMICS_ACCOUNT_NAME
+      - APPDYNAMICS_ACCOUNT_ACCESS_KEY=$APPDYNAMICS_ACCOUNT_ACCESS_KEY
+      - APPDYNAMICS_APPLICATION_NAME=$APPDYNAMICS_APPLICATION_NAME
+      - APPDYNAMICS_TIER_NAME=$APPDYNAMICS_TIER_NAME
+      - APPDYNAMICS_NODE_NAME=$APPDYNAMICS_NODE_NAME
+      - WEB_SERVICE_PORT=3001
+    build: ./web
+    volumes:
+      - ./web:/app
+    ports:
+      - 3001:3001
+  grafana:
+    image: grafana/grafana:6.6.2
+    environment:
+        - GF_SECURITY_ADMIN_PASSWORD=$GF_SECURITY_ADMIN_PASSWORD
+    depends_on:
+        - prom
+    ports:
+        - 3000:3000
+    user: "104"
