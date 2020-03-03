@@ -36,7 +36,7 @@ spec:
         - name: APPDYNAMICS_TIER_NAME
         - name: WEB_SERVICE_PORT
           value: "3001"
-        image: williamjeffries/forward-proxy_web:0.0.4
+        image: gcr.io/contino-964410af4459509a/forward-proxy_web:0.0.5
         imagePullPolicy: ""
         name: web
         ports:
