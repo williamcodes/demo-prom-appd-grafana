@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: web
+    spec:
+      containers:
+      - env:
+        - name: APPDYNAMICS_ACCOUNT_ACCESS_KEY
+        - name: APPDYNAMICS_ACCOUNT_NAME
+        - name: APPDYNAMICS_APPLICATION_NAME
+        - name: APPDYNAMICS_CONTROLLER_HOST_NAME
+        - name: APPDYNAMICS_CONTROLLER_PORT
+        - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
+        - name: APPDYNAMICS_NODE_NAME
+        - name: APPDYNAMICS_TIER_NAME
+        - name: WEB_SERVICE_PORT
+          value: "3001"
+        image: williamjeffries/forward-proxy_web:0.0.4
+        imagePullPolicy: ""
+        name: web
+        ports:
+        - containerPort: 3001
+        resources: {}
+        volumeMounts:
+        - mountPath: /app
+          name: web-claim0
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: web-claim0
+        persistentVolumeClaim:
+          claimName: web-claim0
+status: {}
