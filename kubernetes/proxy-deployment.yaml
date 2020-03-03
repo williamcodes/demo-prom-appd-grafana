@@ -28,7 +28,7 @@ spec:
       - env:
         - name: APPD_TOKEN
         - name: APP_AGENT_AVAILABILITY_URL
-          image: williamjeffries/forward-proxy_proxy:0.0.5
+        image: williamjeffries/forward-proxy_proxy:0.0.5
         imagePullPolicy: ""
         name: proxy
         ports:
